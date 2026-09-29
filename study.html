@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J&E  | منصة علوم تجريبية</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom Glassmorphism Styles -->
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 35%, #9d92a3 70%, #0f172a 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-hover:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .glass-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .active-tab {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            color: #ffffff !important;
+        }
+
+        .active-subtab {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            color: #ffffff !important;
+        }
+
+        /* Glow effects */
+        .glow-purple {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+        }
+        .glow-blue {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar Header -->
+    <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 ring-2 ring-white/20">
+                        <i class="fa-solid font-bold text-xl text-white">J&E</i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
+                                J&E Study
+                            </span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">علوم تجريبية</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium">منصة البكالوريا  </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Desktop) -->
+                <nav class="hidden md:flex items-center gap-2 p-1.5 rounded-2xl glass-card">
+                    <button onclick="switchTab('lessons')" id="tab-lessons" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:text-white transition-all active-tab">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>الدروس والملخصات</span>
+                    </button>
+                    <button onclick="switchTab('schedule')" id="tab-schedule" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:text-white transition-all">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>استعمال الزمن</span>
+                    </button>
+                    <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:text-white transition-all">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>حاسبة المعدل</span>
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 my-2 rounded-2xl p-3 border border-white/10 space-y-2">
+            <button onclick="switchTab('lessons'); toggleMobileMenu()" id="mobile-tab-lessons" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-slate-300 text-right active-tab">
+                <i class="fa-solid fa-book-open text-indigo-400"></i>
+                <span>الدروس والملخصات</span>
+            </button>
+            <button onclick="switchTab('schedule'); toggleMobileMenu()" id="mobile-tab-schedule" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-slate-300 text-right">
+                <i class="fa-solid fa-calendar-days text-purple-400"></i>
+                <span>استعمال الزمن</span>
+            </button>
+            <button onclick="switchTab('calculator'); toggleMobileMenu()" id="mobile-tab-calculator" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-slate-300 text-right">
+                <i class="fa-solid fa-calculator text-pink-400"></i>
+                <span>حاسبة المعدل</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==================== SECTION 1: LESSONS & SUMMARIES ==================== -->
+        <section id="section-lessons" class="space-y-8 animate-fadeIn">
+            
+            <!-- Hero Header -->
+            <div class="glass-card rounded-3xl p-8 relative overflow-hidden border border-indigo-500/20">
+                <div class="absolute -right-10 -top-10 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold">
+                        المواد الاساسية
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                        ملخصات حصريّة لشعبة <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-400">العلوم التجريبية</span>
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                       <strong class="text-indigo-300">"ما تنساش صلاتك، توكل على ربي وربي ما يخيبكش."</strong> 
+                    </p>
+                </div>
+            </div>
+
+            <!-- Subject Cards Grid (Only 3 Main Subjects) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- 1. NATURAL SCIENCES CARD -->
+                <!-- ========================================== -->
+                <div class="glass-card glass-card-hover rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group border border-emerald-500/20">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-emerald-500"></div>
+                    <div>
+                        <!-- Header & Icon -->
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+                                <i class="fa-solid fa-dna"></i>
+                            </div>
+                            <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">
+                                معامل 6
+                            </span>
+                        </div>
+
+                        <!-- Content Info -->
+                        <h2 class="text-xl font-bold text-white mb-2">علوم الطبيعة والحياة</h2>
+                        <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                            تركيب البروتين، النشاط الإنزيمي، المناعة، التكتونيك، والاتصال العصبي مجهّزة مع منهجية الإجابة الدقيقة.
+                        </p>
+
+                        <!-- Summaries List -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-emerald-400"></i> تركيب البروتين والإنزيمات</span>
+                                <span class="text-slate-400 text-[10px]">فيديو</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-emerald-400"></i> المناعة والاتصال العصبي</span>
+                                <span class="text-slate-400 text-[10px]">فيديو </span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-lightbulb text-amber-400"></i> منهجية العلوم </span>
+                                <span class="text-slate-400 text-[10px]">فيديو</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                        <button onclick="openResource('علوم الطبيعة والحياة - التصفح السريع', 'https://example.com/biology-preview')" class="w-full py-2.5 px-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors border border-emerald-500/30">
+                            <i class="fa-solid fa-eye"></i> تصفح
+                        </button>
+                        <button onclick="downloadResource('علوم الطبيعة والحياة')" class="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-600/30">
+                            <i class="fa-solid fa-download"></i> تحميل
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. MATHEMATICS CARD -->
+                <!-- ========================================== -->
+                <div class="glass-card glass-card-hover rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group border border-indigo-500/20">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-indigo-500"></div>
+                    <div>
+                        <!-- Header & Icon -->
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+                                <i class="fa-solid fa-square-root-variable"></i>
+                            </div>
+                            <span class="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30">
+                                معامل 5
+                            </span>
+                        </div>
+
+                        <!-- Content Info -->
+                        <h2 class="text-xl font-bold text-white mb-2">الرياضيات</h2>
+                        <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                            الدوال العددية، الأُسية واللوغارتمية، المتتاليات، الهندسة الفضائية والاحتمالات مع القوانين والتمارين النموذجية.
+                        </p>
+
+                        <!-- Summaries List -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-indigo-400"></i> ملخص الدوال (ln & exp)</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-indigo-400"></i> المتتاليات الحسابية والهندسية</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-indigo-400"></i> الهندسة الفضائية والاحتمالات</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                        <button onclick="openResource('الرياضيات - التصفح السريع', 'https://example.com/math-preview')" class="w-full py-2.5 px-3 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors border border-indigo-500/30">
+                            <i class="fa-solid fa-eye"></i> تصفح
+                        </button>
+                        <button onclick="downloadResource('الرياضيات')" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-indigo-600/30">
+                            <i class="fa-solid fa-download"></i> تحميل
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. PHYSICAL SCIENCES CARD -->
+                <!-- ========================================== -->
+                <div class="glass-card glass-card-hover rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group border border-purple-500/20">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-purple-500"></div>
+                    <div>
+                        <!-- Header & Icon -->
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-purple-500/30 shadow-lg shadow-purple-500/10">
+                                <i class="fa-solid fa-atom"></i>
+                            </div>
+                            <span class="bg-purple-500/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full border border-purple-500/30">
+                                معامل 5
+                            </span>
+                        </div>
+
+                        <!-- Content Info -->
+                        <h2 class="text-xl font-bold text-white mb-2">العلوم الفيزيائية</h2>
+                        <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                            المتابعة الزمنية، التحولات النواوية، الظواهر الكهربائية (RC/RL)، أحماض-أسس والميكانيك.
+                        </p>
+
+                        <!-- Summaries List -->
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-purple-400"></i> المتابعة الزمنية والتحولات النواوية</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-purple-400"></i> الكهرباء (ثنائي القطب RC / RL)</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/5 border border-white/5 text-slate-200">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-pdf text-purple-400"></i> تطور جملة كيميائية والميكانيك</span>
+                                <span class="text-slate-400 text-[10px]">PDF</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                        <button onclick="openResource('العلوم الفيزيائية - التصفح السريع', 'https://example.com/physics-preview')" class="w-full py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors border border-purple-500/30">
+                            <i class="fa-solid fa-eye"></i> تصفح
+                        </button>
+                        <button onclick="downloadResource('العلوم الفيزيائية')" class="w-full py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-purple-600/30">
+                            <i class="fa-solid fa-download"></i> تحميل
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SECTION 2: WEEKLY SCHEDULE ==================== -->
+        <section id="section-schedule" class="hidden space-y-8 animate-fadeIn">
+            
+            <!-- Schedule Control Bar -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 border border-purple-500/20">
+                <div>
+                    <div class="flex items-center gap-2 text-indigo-300 text-xs font-bold mb-1">
+                        <i class="fa-solid fa-clock"></i> التوقيت الرسمي الدراسي
+                    </div>
+                    <h2 class="text-2xl font-black text-white">جدول استعمال الزمن الأسبوعي</h2>
+                    <p class="text-xs text-slate-300">يحتوي على جميع المواد والحصص المقررة مع أسماء الأساتذة لكل قسم</p>
+                </div>
+
+                <!-- Division Switcher Sub-tabs -->
+                <div class="flex items-center p-1.5 rounded-2xl bg-black/30 border border-white/10 w-full md:w-auto">
+                    <button onclick="switchDivision('sci1')" id="btn-division-1" class="flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm text-slate-300 transition-all active-subtab flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>قسم علوم 1</span>
+                    </button>
+                    <button onclick="switchDivision('sci2')" id="btn-division-2" class="flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm text-slate-300 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>قسم علوم 2</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Schedule Container Table -->
+            <div class="glass-card rounded-3xl p-4 sm:p-6 overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[800px] border-collapse text-center">
+                        <thead>
+                            <tr class="border-b border-white/10 text-xs text-slate-300">
+                                <th class="py-3 px-4 font-bold bg-white/5 rounded-tr-xl">اليوم</th>
+                                <th class="py-3 px-2 font-semibold">08:00 - 09:00</th>
+                                <th class="py-3 px-2 font-semibold">09:00 - 10:00</th>
+                                <th class="py-3 px-2 font-semibold">10:00 - 11:00</th>
+                                <th class="py-3 px-2 font-semibold">11:00 - 12:00</th>
+                                <th class="py-3 px-2 font-bold text-amber-300 bg-amber-500/10 border-x border-white/5">12:00-14:00</th>
+                                <th class="py-3 px-2 font-semibold">14:00 - 15:00</th>
+                                <th class="py-3 px-2 font-semibold">15:00 - 16:00</th>
+                                <th class="py-3 px-2 font-semibold rounded-tl-xl">16:00 - 17:00</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-tbody" class="divide-y divide-white/5">
+                            <!-- Timetable Rows Inserted via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Schedule Legend -->
+                <div class="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span> علوم الطبيعة والحياة
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-indigo-500"></span> الرياضيات
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-purple-500"></span> العلوم الفيزيائية
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-500"></span> مواد أدبية ولغات
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-slate-500"></span> تربية بدنية / استراحة
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION 3: GPA CALCULATOR ==================== -->
+        <section id="section-calculator" class="hidden space-y-8 animate-fadeIn">
+            
+            <!-- Calculator Banner -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-pink-500/20 relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-semibold">
+                            حاسبة رسمية ودقيقة
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">حاسبة معدل الفصل لشعبة علوم تجريبية</h2>
+                        <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                            أدخل علاماتك لحساب المعدل الفصلي والتراكمي آلياً مع مراعاة المعاملات الرسمية لوزارة التربية الوطنية.
+                        </p>
+                    </div>
+
+                    <!-- Calculated Score Display Badge -->
+                    <div class="w-full sm:w-auto p-5 rounded-2xl bg-gradient-to-br from-indigo-600/40 via-purple-600/40 to-pink-600/40 border border-white/20 text-center glow-purple">
+                        <div class="text-xs text-slate-300 font-semibold mb-1">المعدل العام التقديري</div>
+                        <div id="final-gpa" class="text-4xl font-black text-white tracking-wider">00.00</div>
+                        <div id="gpa-status" class="text-xs font-bold text-amber-300 mt-1">في انتظار إدخال النقاط</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects Grades Input Form Table -->
+            <div class="glass-card rounded-3xl p-4 sm:p-6 border border-white/10 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[650px] border-collapse text-right">
+                        <thead>
+                            <tr class="border-b border-white/10 text-xs text-slate-300">
+                                <th class="py-3 px-4 font-bold">المادة</th>
+                                <th class="py-3 px-4 font-bold text-center">المعامل</th>
+                                <th class="py-3 px-4 font-bold">علامة الاختبار / المراقبة (من 20)</th>
+                                <th class="py-3 px-4 font-bold text-left">المجموع الصافي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calculator-tbody" class="divide-y divide-white/5">
+                            <!-- Rows generated dynamic via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Calculator Actions Buttons -->
+                <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between gap-4">
+                    <button onclick="resetCalculator()" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-rotate-right"></i> إعادة ضبط
+                    </button>
+                    <button onclick="calculateGPA()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-bold text-sm shadow-lg shadow-purple-500/30 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-calculator"></i> احسب المعدل الآن
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/10 bg-slate-950/60 backdrop-blur-md py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-right flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div>
+                <span class="font-bold text-white">J&E Study</span> &copy; 2026 - جميع الحقوق محفوظة لطلاب شعبة علوم تجريبية.
+            </div>
+            <div class="flex items-center gap-4">
+                <span>تم التطوير بواسطة: <strong class="text-indigo-300">جواد & إلياس</strong></span>
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>قسم علوم 1 & قسم علوم 2</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Web App JavaScript Logic -->
+    <script>
+        /* 
+        ===================================================================
+        DATA STRUCTURES - EASILY EDITABLE BY TEACHERS/STUDENTS
+        يمكنك تعديل الأساتذة أو المواد أو الجدول هنا بسهولة وبساطة
+        ===================================================================
+        */
+
+        // 1. SUBJECTS DATA FOR GPA CALCULATOR (شعبة علوم تجريبية)
+        const subjectsData = [
+            { id: 'bio', name: 'علوم الطبيعة والحياة', coef: 6, icon: 'fa-dna', color: 'emerald' },
+            { id: 'math', name: 'الرياضيات', coef: 5, icon: 'fa-square-root-variable', color: 'indigo' },
+            { id: 'phy', name: 'العلوم الفيزيائية', coef: 5, icon: 'fa-atom', color: 'purple' },
+            { id: 'ar', name: 'اللغة العربية والآداب', coef: 3, icon: 'fa-feather', color: 'amber' },
+            { id: 'fr', name: 'اللغة الفرنسية', coef: 2, icon: 'fa-language', color: 'blue' },
+            { id: 'en', name: 'اللغة الإنجليزية', coef: 2, icon: 'fa-globe', color: 'cyan' },
+            { id: 'hist', name: 'التاريخ والجغرافيا', coef: 2, icon: 'fa-map-location-dot', color: 'orange' },
+            { id: 'phil', name: 'الفلسفة', coef: 2, icon: 'fa-brain', color: 'pink' },
+            { id: 'islamic', name: 'العلوم الإسلامية', coef: 2, icon: 'fa-book-quran', color: 'teal' },
+            { id: 'pe', name: 'التربية البدنية والرياضية', coef: 1, icon: 'fa-person-running', color: 'slate' }
+        ];
+
+        // 2. TIMETABLES FOR DIVISION 1 AND DIVISION 2
+        // جدول الحصص الأسبوعي - علوم 1 وعلوم 2 (4 حصص صباحاً + 3 عصراً)
+        const scheduleData = {
+            // ================== قسم علوم 1 ==================
+            sci1: [
+                {
+                    day: 'الأحد',
+                    slots: [
+                        { subject: 'علوم الطبيعة', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'الرياضيات', teacher: 'أ. منصوري', type: 'math' },
+                        { subject: 'الفيزياء', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'اللغة العربية', teacher: 'أ. زروقي', type: 'lit' },
+                        { subject: 'اللغة الإنجليزية', teacher: 'أ. حداد', type: 'lit' },
+                        { subject: 'العلوم الإسلامية', teacher: 'أ. بن علي', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الإثنين',
+                    slots: [
+                        { subject: 'الفيزياء', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'الفيزياء', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'الرياضيات', teacher: 'أ. منصوري', type: 'math' },
+                        { subject: 'التاريخ والجغرافيا', teacher: 'أ. حمداوي', type: 'lit' },
+                        { subject: 'اللغة الفرنسية', teacher: 'أ. مرابط', type: 'lit' },
+                        { subject: 'الفلسفة', teacher: 'أ. سليماني', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الثلاثاء',
+                    slots: [
+                        { subject: 'الرياضيات', teacher: 'أ. منصوري', type: 'math' },
+                        { subject: 'الرياضيات', teacher: 'أ. منصوري', type: 'math' },
+                        { subject: 'اللغة العربية', teacher: 'أ. زروقي', type: 'lit' },
+                        { subject: 'العلوم الإسلامية', teacher: 'أ. بن علي', type: 'lit' },
+                        { subject: 'تربية بدنية', teacher: 'أ. رحماني', type: 'pe' },
+                        { subject: 'تربية بدنية', teacher: 'أ. رحماني', type: 'pe' },
+                        { subject: 'استراحة / أعمال', teacher: '-', type: 'pe' }
+                    ]
+                },
+                {
+                    day: 'الأربعاء',
+                    slots: [
+                        { subject: 'علوم الطبيعة', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'الفيزياء', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'الفيزياء', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'اللغة الإنجليزية', teacher: 'أ. حداد', type: 'lit' },
+                        { subject: 'التاريخ والجغرافيا', teacher: 'أ. حمداوي', type: 'lit' },
+                        { subject: 'اللغة الفرنسية', teacher: 'أ. مرابط', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الخميس',
+                    slots: [
+                        { subject: 'الرياضيات', teacher: 'أ. منصوري', type: 'math' },
+                        { subject: 'الفلسفة', teacher: 'أ. سليماني', type: 'lit' },
+                        { subject: 'اللغة العربية', teacher: 'أ. زروقي', type: 'lit' },
+                        { subject: 'التاريخ والجغرافيا', teacher: 'أ. حمداوي', type: 'lit' },
+                        { subject: 'أعمال موجهة (علوم)', teacher: 'أ. بلعربي', type: 'bio' },
+                        { subject: 'أعمال موجهة (فيزياء)', teacher: 'أ. قادري', type: 'phy' },
+                        { subject: 'ساعة مكتبية', teacher: '-', type: 'pe' }
+                    ]
+                }
+            ],
+
+            // ================== قسم علوم 2 ==================
+            sci2: [
+                {
+                    day: 'الأحد',
+                    slots: [
+                        { subject: 'الفيزياء', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'الفيزياء', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'اللغة الإنجليزية', teacher: 'أ. عماري', type: 'lit' },
+                        { subject: 'اللغة العربية', teacher: 'أ. طاهري', type: 'lit' },
+                        { subject: 'الفلسفة', teacher: 'أ. الغالي', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الإثنين',
+                    slots: [
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'الفيزياء', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'العلوم الإسلامية', teacher: 'أ. براهيمي', type: 'lit' },
+                        { subject: 'التاريخ والجغرافيا', teacher: 'أ. شريف', type: 'lit' },
+                        { subject: 'اللغة الفرنسية', teacher: 'أ. ناصري', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الثلاثاء',
+                    slots: [
+                        { subject: 'الفيزياء', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'اللغة العربية', teacher: 'أ. طاهري', type: 'lit' },
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'تربية بدنية', teacher: 'أ. مالكي', type: 'pe' },
+                        { subject: 'تربية بدنية', teacher: 'أ. مالكي', type: 'pe' },
+                        { subject: 'استراحة / أعمال', teacher: '-', type: 'pe' }
+                    ]
+                },
+                {
+                    day: 'الأربعاء',
+                    slots: [
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'الرياضيات', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'التاريخ والجغرافيا', teacher: 'أ. شريف', type: 'lit' },
+                        { subject: 'اللغة الفرنسية', teacher: 'أ. ناصري', type: 'lit' },
+                        { subject: 'اللغة الإنجليزية', teacher: 'أ. عماري', type: 'lit' }
+                    ]
+                },
+                {
+                    day: 'الخميس',
+                    slots: [
+                        { subject: 'علوم الطبيعة', teacher: 'أ. سعيدي', type: 'bio' },
+                        { subject: 'الفيزياء', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'اللغة العربية', teacher: 'أ. طاهري', type: 'lit' },
+                        { subject: 'العلوم الإسلامية', teacher: 'أ. براهيمي', type: 'lit' },
+                        { subject: 'أعمال موجهة (فيزياء)', teacher: 'أ. درويش', type: 'phy' },
+                        { subject: 'أعمال موجهة (رياضيات)', teacher: 'أ. طالب', type: 'math' },
+                        { subject: 'ساعة مكتبية', teacher: '-', type: 'pe' }
+                    ]
+                }
+            ]
+        };
+
+        // Current Active Division State ('sci1' or 'sci2')
+        let currentDivision = 'sci1';
+
+        /* 
+        ===================================================================
+        NAVIGATION & UI TAB SWITCHING LOGIC
+        ===================================================================
+        */
+        function switchTab(tabName) {
+            // Hide all sections
+            document.getElementById('section-lessons').classList.add('hidden');
+            document.getElementById('section-schedule').classList.add('hidden');
+            document.getElementById('section-calculator').classList.add('hidden');
+
+            // Reset navigation active state
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+            document.querySelectorAll('#mobile-menu button').forEach(btn => btn.classList.remove('active-tab'));
+
+            // Show selected section
+            document.getElementById(`section-${tabName}`).classList.remove('hidden');
+
+            // Set active class to tabs
+            const activeNavBtn = document.getElementById(`tab-${tabName}`);
+            if (activeNavBtn) activeNavBtn.classList.add('active-tab');
+
+            const activeMobileBtn = document.getElementById(`mobile-tab-${tabName}`);
+            if (activeMobileBtn) activeMobileBtn.classList.add('active-tab');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* 
+        ===================================================================
+        SCHEDULE GENERATOR & DIVISION SWITCHER LOGIC
+        ===================================================================
+        */
+        function switchDivision(divKey) {
+            currentDivision = divKey;
+            
+            const btn1 = document.getElementById('btn-division-1');
+            const btn2 = document.getElementById('btn-division-2');
+
+            if (divKey === 'sci1') {
+                btn1.classList.add('active-subtab');
+                btn2.classList.remove('active-subtab');
+            } else {
+                btn2.classList.add('active-subtab');
+                btn1.classList.remove('active-subtab');
+            }
+
+            renderSchedule();
+        }
+
+        function getSubjectColorClass(type) {
+            switch(type) {
+                case 'bio': return 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300';
+                case 'math': return 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300';
+                case 'phy': return 'bg-purple-500/15 border-purple-500/30 text-purple-300';
+                case 'lit': return 'bg-amber-500/15 border-amber-500/30 text-amber-300';
+                default: return 'bg-white/5 border-white/10 text-slate-400';
+            }
+        }
+
+        function renderSchedule() {
+            const tbody = document.getElementById('schedule-tbody');
+            tbody.innerHTML = '';
+
+            const week = scheduleData[currentDivision];
+
+            week.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition-colors';
+
+                // Day Column
+                let html = `<td class="py-4 px-3 font-bold text-white text-sm bg-white/5 border-l border-white/10">${row.day}</td>`;
+
+                // First 4 morning slots (08:00 - 12:00)
+                for (let i = 0; i < 4; i++) {
+                    const slot = row.slots[i];
+                    const colorStyle = getSubjectColorClass(slot.type);
+                    html += `
+                        <td class="p-2">
+                            <div class="p-2.5 rounded-xl border ${colorStyle} flex flex-col justify-center min-h-[64px]">
+                                <span class="font-bold text-xs leading-snug">${slot.subject}</span>
+                                <span class="text-[10px] opacity-80 mt-1 font-medium"><i class="fa-solid fa-user-tie text-[9px]"></i> ${slot.teacher}</span>
+                            </div>
+                        </td>
+                    `;
+                }
+
+                // Lunch Break Column (12:00 - 14:00)
+                html += `
+                    <td class="p-1 bg-amber-500/5 border-x border-white/5">
+                        <div class="text-[10px] font-bold text-amber-400/70 rotate-0 sm:-rotate-90">استراحة</div>
+                    </td>
+                `;
+
+                // Next 3 afternoon slots (14:00 - 17:00)
+                for (let i = 4; i < 7; i++) {
+                    const slot = row.slots[i];
+                    const colorStyle = getSubjectColorClass(slot.type);
+                    html += `
+                        <td class="p-2">
+                            <div class="p-2.5 rounded-xl border ${colorStyle} flex flex-col justify-center min-h-[64px]">
+                                <span class="font-bold text-xs leading-snug">${slot.subject}</span>
+                                <span class="text-[10px] opacity-80 mt-1 font-medium"><i class="fa-solid fa-user-tie text-[9px]"></i> ${slot.teacher}</span>
+                            </div>
+                        </td>
+                    `;
+                }
+
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* 
+        ===================================================================
+        GPA CALCULATOR LOGIC
+        ===================================================================
+        */
+        function renderCalculator() {
+            const tbody = document.getElementById('calculator-tbody');
+            tbody.innerHTML = '';
+
+            subjectsData.forEach(sub => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-3 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-slate-300 text-sm">
+                                <i class="fa-solid ${sub.icon}"></i>
+                            </div>
+                            <span class="font-bold text-sm text-white">${sub.name}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="px-2.5 py-1 rounded-lg bg-white/10 text-xs font-bold text-slate-300">${sub.coef}</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <input type="number" id="input-${sub.id}" min="0" max="20" step="0.25" placeholder="أدخل العلامة (0-20)" 
+                            oninput="calculateGPA()"
+                            class="glass-input w-full max-w-[200px] px-3 py-2 rounded-xl text-sm font-semibold">
+                    </td>
+                    <td class="py-3 px-4 text-left">
+                        <span id="total-${sub.id}" class="font-bold text-sm text-indigo-300">0.00</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function calculateGPA() {
+            let totalWeightedMarks = 0;
+            let totalCoefficients = 0;
+            let hasInput = false;
+
+            subjectsData.forEach(sub => {
+                const input = document.getElementById(`input-${sub.id}`);
+                const mark = parseFloat(input.value);
+
+                if (!isNaN(mark) && mark >= 0 && mark <= 20) {
+                    const weighted = mark * sub.coef;
+                    document.getElementById(`total-${sub.id}`).innerText = weighted.toFixed(2);
+                    totalWeightedMarks += weighted;
+                    totalCoefficients += sub.coef;
+                    hasInput = true;
+                } else {
+                    document.getElementById(`total-${sub.id}`).innerText = "0.00";
+                    totalCoefficients += sub.coef; // Include official coefficient anyway
+                }
+            });
+
+            const finalGpaElement = document.getElementById('final-gpa');
+            const gpaStatusElement = document.getElementById('gpa-status');
+
+            if (hasInput && totalCoefficients > 0) {
+                const gpa = totalWeightedMarks / totalCoefficients;
+                finalGpaElement.innerText = gpa.toFixed(2);
+
+                if (gpa >= 16) {
+                    gpaStatusElement.innerText = 'ممتاز! واصل التألق ✨';
+                    gpaStatusElement.className = 'text-xs font-bold text-emerald-400 mt-1';
+                } else if (gpa >= 14) {
+                    gpaStatusElement.innerText = 'جيد جداً! عمل رائع 👍';
+                    gpaStatusElement.className = 'text-xs font-bold text-indigo-400 mt-1';
+                } else if (gpa >= 12) {
+                    gpaStatusElement.innerText = 'جيد! يمكن الوصول للأفضل 💪';
+                    gpaStatusElement.className = 'text-xs font-bold text-blue-400 mt-1';
+                } else if (gpa >= 10) {
+                    gpaStatusElement.innerText = 'مقبول - يحتاج لجهد إضافي 📚';
+                    gpaStatusElement.className = 'text-xs font-bold text-amber-400 mt-1';
+                } else {
+                    gpaStatusElement.innerText = 'دون المعدل - لا تستسلم، يمكنك التدارك! 🎯';
+                    gpaStatusElement.className = 'text-xs font-bold text-rose-400 mt-1';
+                }
+            } else {
+                finalGpaElement.innerText = '00.00';
+                gpaStatusElement.innerText = 'في انتظار إدخال النقاط';
+                gpaStatusElement.className = 'text-xs font-bold text-amber-300 mt-1';
+            }
+        }
+
+        function resetCalculator() {
+            subjectsData.forEach(sub => {
+                const input = document.getElementById(`input-${sub.id}`);
+                if (input) input.value = '';
+                const total = document.getElementById(`total-${sub.id}`);
+                if (total) total.innerText = '0.00';
+            });
+            document.getElementById('final-gpa').innerText = '00.00';
+            document.getElementById('gpa-status').innerText = 'في انتظار إدخال النقاط';
+            document.getElementById('gpa-status').className = 'text-xs font-bold text-amber-300 mt-1';
+        }
+
+        /* 
+        ===================================================================
+        RESOURCE ACTIONS (DOWNLOAD & PREVIEW NOTIFICATIONS)
+        ===================================================================
+        */
+        function openResource(title, url) {
+            showToast(`جاري فتح معاينة: ${title}`);
+        }
+
+        function downloadResource(subjectName) {
+            showToast(`جاري بدء تحميل ملخصات مادة ${subjectName}...`);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-6 z-50 px-5 py-3 rounded-2xl glass-card text-white text-xs font-bold flex items-center gap-3 border border-indigo-500/40 shadow-2xl animate-bounce';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3500);
+        }
+
+        /* 
+        ===================================================================
+        APPLICATION INITIALIZATION ON LOAD
+        ===================================================================
+        */
+        window.onload = function() {
+            renderSchedule();
+            renderCalculator();
+        };
+    </script>
+</body>
+</html>
